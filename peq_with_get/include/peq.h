@@ -1,25 +1,26 @@
-#ifndef DELAY_H
-#define DELAY_H
+#ifndef PEQ_H
+#define PEQ_H
 
 #include <systemc>
 #include <map>
 
-namespace theo_end {
+namespace little_end {
 
 template <class transaction_type>
-class delay : public sc_core::sc_object
+class peq : public sc_core::sc_object
 {
 public:
-    delay(const char* name) : sc_core::sc_object(name)
+    peq(const char* name, const int freq) : sc_core::sc_object(name)
     {
+        m_period = sc_time(1.0 * 1000 / freq, SC_NS);
     }
 
-    void notify(transaction_type& trans, const sc_core::sc_time& t)
+    void delay(transaction_type& trans, const int t)
     {
-        m_scheduled_events.insert(pair_type(t + sc_core::sc_time_stamp(), &trans));
+        m_scheduled_events.insert(pair_type(t * m_period + sc_core::sc_time_stamp(), &trans));
     }
 
-    void notify(transaction_type& trans)
+    void delay(transaction_type& trans)
     {
         m_scheduled_events.insert(pair_type(sc_core::sc_time_stamp(), &trans));
     }
@@ -47,6 +48,7 @@ public:
     }
 
 private:
+    sc_time    m_period;
     std::multimap<const sc_core::sc_time, transaction_type*> m_scheduled_events;
 
 private:
