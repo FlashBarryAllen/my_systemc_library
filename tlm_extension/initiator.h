@@ -3,22 +3,12 @@
 
 #include "utilities.h"
 #include "tlm_utils/simple_initiator_socket.h"
-#include "tlm_utils/peq_with_cb_and_phase.h"
-
-
-// **************************************************************************************
-// Initiator module generating multiple pipelined generic payload transactions
-// **************************************************************************************
 
 struct Initiator: sc_module
 {
-    // TLM-2 socket, defaults to 32-bits wide, base protocol
     tlm_utils::simple_initiator_socket<Initiator> socket;
 
-    SC_CTOR(Initiator)
-    : socket("socket")  // Construct and name socket
-    {
-      // Register callbacks for incoming interface method calls
+    SC_CTOR(Initiator) : socket("socket") {
       socket.register_nb_transport_bw(this, &Initiator::nb_transport_bw);
 
       SC_METHOD(request);
@@ -31,8 +21,7 @@ struct Initiator: sc_module
       sc_time delay;
 
       // Generate a sequence of random transactions
-      for (int i = 0; i < 10; i++)
-      {
+      for (int i = 0; i < 10; i++) {
         int adr = rand();
         tlm::tlm_command cmd = static_cast<tlm::tlm_command>(rand() % 2);
         if (cmd == tlm::TLM_WRITE_COMMAND) data[i % 16] = rand() % 10;
@@ -66,8 +55,7 @@ struct Initiator: sc_module
     }
 
     virtual tlm::tlm_sync_enum nb_transport_bw( tlm::tlm_generic_payload& trans,
-                                                tlm::tlm_phase& phase, sc_time& delay )
-    {
+                                                tlm::tlm_phase& phase, sc_time& delay ) {
         tlm::tlm_command cmd = trans.get_command();
         int              adr = trans.get_address();
         int*             ptr = reinterpret_cast<int*>( trans.get_data_ptr() );

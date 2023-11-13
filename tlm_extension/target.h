@@ -11,8 +11,7 @@ struct Target: sc_module
     little_end::peq<tlm::tlm_generic_payload> m_peq;
     sc_in_clk m_clk;
 
-    SC_CTOR(Target)
-    : socket("socket"), m_peq("peq", 1000)
+    SC_CTOR(Target) : socket("socket"), m_peq("peq", 1000)
     {
         socket.register_nb_transport_fw(this, &Target::nb_transport_fw);
 
@@ -41,8 +40,7 @@ struct Target: sc_module
     }
 
     virtual tlm::tlm_sync_enum nb_transport_fw( tlm::tlm_generic_payload& trans,
-                                                tlm::tlm_phase& phase, sc_time& delay )
-    {
+                                                tlm::tlm_phase& phase, sc_time& delay ) {
         tlm::tlm_command cmd = trans.get_command();
         int              adr = trans.get_address();
         unsigned int     len = trans.get_data_length();
