@@ -24,7 +24,14 @@ struct Initiator: sc_module
       for (int i = 0; i < 10; i++) {
         int adr = rand();
         tlm::tlm_command cmd = static_cast<tlm::tlm_command>(rand() % 2);
-        if (cmd == tlm::TLM_WRITE_COMMAND) data[i % 16] = rand() % 10;
+        if (cmd == tlm::TLM_WRITE_COMMAND) {
+            data[i % 16] = rand() % 10;
+        }
+
+        little_end::chi_extension* extension_pointer;
+        extension_pointer = new little_end::chi_extension();
+        extension_pointer->srcAddr = 0x00 + i;
+        extension_pointer->dstAddr = 0xFF + i;
 
         // Grab a new transaction from the memory manager
         trans = m_mm.allocate();
@@ -39,6 +46,7 @@ struct Initiator: sc_module
         trans->set_byte_enable_ptr( 0 ); // 0 indicates unused
         trans->set_dmi_allowed( false ); // Mandatory initial value
         trans->set_response_status( tlm::TLM_INCOMPLETE_RESPONSE ); // Mandatory initial value
+        trans->set_extension(extension_pointer);
 
         phase = tlm::BEGIN_REQ;
 

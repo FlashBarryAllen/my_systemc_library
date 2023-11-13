@@ -9,6 +9,7 @@ using namespace std;
 #include "tlm.h"
 #include <fstream>
 #include <memory>
+#include "chi_extension.h"
 
 static ofstream fout("output.txt");
 

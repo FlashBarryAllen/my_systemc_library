@@ -32,6 +32,11 @@ struct Target: sc_module
             unsigned int     wid = payload->get_streaming_width();
             int*             dat = reinterpret_cast<int*>( payload->get_data_ptr() );
 
+            little_end::chi_extension * extension_pointer = nullptr;
+            payload->get_extension(extension_pointer);
+
+            cout << extension_pointer->srcAddr << ", " << extension_pointer->dstAddr << endl;
+
             fout << hex << " " << name() << " snd, cmd=" << (cmd ? 'W' : 'R') << ", adr = " << adr 
             << ", data=" << *dat << " at time " << sc_time_stamp() << std::endl;
 
