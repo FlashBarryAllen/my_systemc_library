@@ -37,6 +37,11 @@ struct Target: sc_module
 
             cout << extension_pointer->srcAddr << ", " << extension_pointer->dstAddr << endl;
 
+            extension_pointer->srcAddr++;
+            extension_pointer->dstAddr++;
+
+            delete extension_pointer;
+
             fout << hex << " " << name() << " snd, cmd=" << (cmd ? 'W' : 'R') << ", adr = " << adr 
             << ", data=" << *dat << " at time " << sc_time_stamp() << std::endl;
 
@@ -52,7 +57,7 @@ struct Target: sc_module
         unsigned char*   byt = trans.get_byte_enable_ptr();
         unsigned int     wid = trans.get_streaming_width();
         int*             dat = reinterpret_cast<int*>( trans.get_data_ptr() );
-        int              cnt = 10 + rand() % 10;
+        int              cnt = 1 + rand() % 1;
 
         fout << hex << " " << name() << " rcv, cmd=" << (cmd ? 'W' : 'R') << ", adr = " << adr 
            << ", data=" << *dat << " at time " << sc_time_stamp() 
