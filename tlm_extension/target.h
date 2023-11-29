@@ -11,7 +11,7 @@ struct Target: sc_module
     little_end::peq<tlm::tlm_generic_payload> m_peq;
     sc_in_clk m_clk;
 
-    SC_CTOR(Target) : socket("socket"), m_peq("peq", 1000)
+    SC_CTOR(Target) : socket("socket"), m_peq("peq")
     {
         socket.register_nb_transport_fw(this, &Target::nb_transport_fw);
 
