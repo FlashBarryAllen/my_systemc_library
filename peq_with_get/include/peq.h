@@ -10,14 +10,19 @@ template <class transaction_type>
 class peq : public sc_core::sc_object
 {
 public:
-    peq(const char* name, const int freq) : sc_core::sc_object(name)
+    peq(const char* name, const int freq = 1000) : sc_core::sc_object(name), m_freq(freq)
     {
-        m_period = sc_time(1.0 * 1000 / freq, SC_NS);
+        
+    }
+
+    void set_freq(const int freq) {
+        m_freq = freq;
     }
 
     void delay(transaction_type& trans, const int t)
     {
-        m_scheduled_events.insert(pair_type(t * m_period + sc_core::sc_time_stamp(), &trans));
+        sc_time period = sc_time(1.0 * 1000 / m_freq, SC_NS);
+        m_scheduled_events.insert(pair_type(t * period + sc_core::sc_time_stamp(), &trans));
     }
 
     void delay(transaction_type& trans)
@@ -48,7 +53,7 @@ public:
     }
 
 private:
-    sc_time    m_period;
+    int        m_freq;
     std::multimap<const sc_core::sc_time, transaction_type*> m_scheduled_events;
 
 private:
