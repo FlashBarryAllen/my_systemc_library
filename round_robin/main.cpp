@@ -18,8 +18,8 @@ public:
       : sc_module(name), m_period(sc_time(1000, SC_PS)) {
     SC_THREAD(PushPeq);
     SC_THREAD(RRArbitration);
-    SC_THREAD(QoSRRArbitration);
-    SC_THREAD(QoSRRPrioLevelArbitration);
+    //SC_THREAD(QoSRRArbitration);
+    //SC_THREAD(QoSRRPrioLevelArbitration);
   };
   ~TestPlatform() = default;
  
@@ -41,6 +41,11 @@ void TestPlatform::PushPeq() {
   m_input[1].push_back(1);
   m_input[2].push_back(3);
   m_input[3].push_back(0);
+
+  //m_input[0].push_back(2);
+  //m_input[1].push_back(1);
+  m_input[2].push_back(3);
+  //m_input[3].push_back(0);
  
   m_input[4].push_back(2);
   m_input[5].push_back(1);
@@ -73,7 +78,7 @@ void TestPlatform::RRArbitration() {
       }
     }
     if (!t_have_input) {
-      wait(m_push_evt);
+      //wait(m_push_evt);
       continue;
     }
  
