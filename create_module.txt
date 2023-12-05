@@ -1,0 +1,9 @@
+1.先创建模块名，三种方式，{SC_MODULE, class, struct}
+2.定义模块名为SC_CURRENT_USER_MODULE, 两种方法{SC_HAS_PROCESS, typedef module SC_CURRENT_USER_MODULE}
+    2.1 增加语句 SC_HAS_PROCESS 本质上是把module替换 SC_CURRENT_USER_MODULE;
+    2.2 SC_CURRENT_USER_MODULE 用于SC_CTHREAD|SC_THREAD|SC_METHOD中;
+3.自定义构造函数，有两种方法，{SC_CTOR, module_name(...)}
+    3.1 SC_CTOR构造函数宏的入参有且只有一个 sc_module_name，但是module_name的入参可以多个;
+    3.2 可以在构造函数的初始化列表中初始化类成员函数，比如socket;
+4.注册模块循环执行函数入口，可以通过 SC_METHOD|SC_THREAD|用于SC_CTHREAD;
+5.链接模块循环执行函数敏感事件，可以是时钟，也可以是事件;

@@ -8,7 +8,7 @@
             "name": "(gdb) 启动",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/my_systemc_library/tlm_extension/out",
+            "program": "${workspaceFolder}/build/abc",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
