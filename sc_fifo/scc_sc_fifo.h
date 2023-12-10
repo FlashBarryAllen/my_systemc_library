@@ -2,6 +2,7 @@
 #define SCC_sSC_FIFO_H
 
 #include <deque>
+#include <vector>
 
 namespace sc_component {
 
@@ -10,6 +11,12 @@ class sc_fifo {
     public:
         sc_fifo() {
             m_len = len;
+            m_vec = new type[m_len];
+            //m_vec.resize(m_len);
+            m_free = m_len;
+            m_wi = 0;
+            m_ri = 0;
+            m_num_readable = 0;
         }
 
         ~sc_fifo() {
@@ -34,8 +41,39 @@ class sc_fifo {
             return true;
         }
 
+        bool write(const type& val) {
+            if (m_free == 0) {
+                return false;
+            }
+
+            m_vec[m_wi] = val;
+            m_wi = (m_wi + 1) % m_len;
+            m_free--;
+
+            return true;
+        }
+
+        bool read(type& val) {
+            if (m_free == m_len) {
+                return false;
+            }
+
+            val = m_vec[m_ri];
+            m_vec[m_ri] = 0;
+            m_ri = (m_ri + 1) % m_len;
+            m_free++;
+
+            return true;
+        }
+
     private:
         int m_len;
+        int m_wi;
+        int m_ri;
+        int m_free;
+        int m_num_readable;
+        type* m_vec;
+        //std::vector<type> m_vec;
         std::deque<type> m_que;
 };
 };
