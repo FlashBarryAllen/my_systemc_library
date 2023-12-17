@@ -1,5 +1,6 @@
 {
-    //"cmake.sourceDirectory": "/00_ycl/01_code/my_systemc_library/module_communication/inside"
+    "cmake.sourceDirectory": "/00_ycl/01_code/my_systemc_library/module_communication/inside"
     //"cmake.sourceDirectory": "/00_ycl/01_code/my_systemc_library/module_communication/outside"
-    "cmake.sourceDirectory": "/00_ycl/01_code/my_systemc_library/sc_fifo"
+    //"cmake.sourceDirectory": "/00_ycl/01_code/my_systemc_library/sc_fifo"
+    //"cmake.sourceDirectory": "/00_ycl/01_code/my_systemc_library/tlm_communication"
 }
