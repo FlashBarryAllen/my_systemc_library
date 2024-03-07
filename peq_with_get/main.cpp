@@ -36,9 +36,9 @@ void TestPlatform::PushPeq_1()
 {    
     // the transaction that peq will delay can't be a temporary memory space
     for (auto i = 0; i < 2; i++) {
-        unsigned int * t_num_1 = new  unsigned int;
-		*t_num_1 = 100 + i;
-    	m_peq.delay(*t_num_1 , 10 + i);
+        unsigned int t_num_1 = 0;
+		t_num_1 = 100 + i;
+    	m_peq.delay(t_num_1 , 10 + i);
         cout<<"["<<sc_time_stamp()
             <<"] delay number 1 to peq, delay cycle = " << 10 + i
             <<endl;    
@@ -54,9 +54,9 @@ void TestPlatform::PushPeq_2()
     }
 
 	for (auto i = 0; i< 2; i++) {
-        unsigned int * t_num_2 = new  unsigned int;
-        *t_num_2 =  200 + i;
-        m_peq.delay(*t_num_2 , 3);
+        unsigned int t_num_2 = 0;
+        t_num_2 =  200 + i;
+        m_peq.delay(t_num_2 , 3);
         cout<<"["<<sc_time_stamp()
             <<"] delay number 2 to peq, delay cycle = 3"
             <<endl;
@@ -65,16 +65,15 @@ void TestPlatform::PushPeq_2()
 
 void TestPlatform::GetPeq()
 {
-    unsigned int * t_get = NULL;
+    std::shared_ptr<unsigned int> t_get = nullptr;
     //here must get next transaction until t_get is NULL
     while((t_get = m_peq.get_next_transaction()) != NULL)
     {
         cout<<"["<<sc_time_stamp()
             <<"] get number "
-            << * t_get
+            << *t_get
             <<endl;
 
-        delete t_get; //dynamic memory space, delete when no use
         t_get = nullptr;  
     }
 }

@@ -21,13 +21,15 @@ public:
 
     void delay(transaction_type trans, const int t)
     {
+        std::shared_ptr<transaction_type> payload = std::make_shared<transaction_type>(trans);
         sc_time period = sc_time(1.0 * 1000 / m_freq, SC_NS);
-        m_scheduled_events.insert(pair_type(t * period + sc_core::sc_time_stamp(), trans));
+        m_scheduled_events.insert(pair_type(t * period + sc_core::sc_time_stamp(), payload));
     }
 
     void delay(transaction_type trans)
     {
-        m_scheduled_events.insert(pair_type(sc_core::sc_time_stamp(), trans));
+        std::shared_ptr<transaction_type> payload = std::make_shared<transaction_type>(trans);
+        m_scheduled_events.insert(pair_type(sc_core::sc_time_stamp(), payload));
     }
 
     shared_ptr<transaction_type> get_next_transaction()
