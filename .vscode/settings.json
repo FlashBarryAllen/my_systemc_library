@@ -1,7 +1,4 @@
 {
-    "cmake.sourceDirectory": "/00_ycl/01_code/my_systemc_library/module_communication/inside"
-    //"cmake.sourceDirectory": "/00_ycl/01_code/my_systemc_library/module_communication/outside"
-<<<<<<< HEAD
     //"cmake.sourceDirectory": "/00_ycl/01_code/my_systemc_library/sc_fifo",
     //"cmake.sourceDirectory": "/00_ycl/01_github/my_systemc_library/sc_int",
     //"cmake.sourceDirectory": "/00_ycl/01_github/my_systemc_library/sc_fifo_with_delay",
@@ -61,8 +58,4 @@
         "typeinfo": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
-=======
-    //"cmake.sourceDirectory": "/00_ycl/01_code/my_systemc_library/sc_fifo"
-    //"cmake.sourceDirectory": "/00_ycl/01_code/my_systemc_library/tlm_communication"
->>>>>>> 08e52c589ea8a2eaf92c0d93cbe1b011f672b689
 }
