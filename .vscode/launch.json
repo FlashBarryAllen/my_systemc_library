@@ -8,7 +8,11 @@
             "name": "(gdb) 启动",
             "type": "cppdbg",
             "request": "launch",
+<<<<<<< HEAD
             "program": "${workspaceFolder}/build/delay",
+=======
+            "program": "${workspaceFolder}/build/abc",
+>>>>>>> 08e52c589ea8a2eaf92c0d93cbe1b011f672b689
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
