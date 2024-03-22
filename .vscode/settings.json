@@ -2,8 +2,8 @@
     //"cmake.sourceDirectory": "/00_ycl/01_code/my_systemc_library/sc_fifo",
     //"cmake.sourceDirectory": "/00_ycl/01_github/my_systemc_library/sc_int",
     //"cmake.sourceDirectory": "/00_ycl/01_github/my_systemc_library/sc_fifo_with_delay",
-    //"cmake.sourceDirectory": "/00_ycl/01_github/my_systemc_library/test",
-    "cmake.sourceDirectory": "/00_ycl/01_github/my_systemc_library/peq_with_get",
+    "cmake.sourceDirectory": "/00_ycl/01_github/my_systemc_library/test",
+    //"cmake.sourceDirectory": "/00_ycl/01_github/my_systemc_library/peq_with_get",
     "files.associations": {
         "queue": "cpp",
         "systemc": "cpp",
@@ -55,7 +55,9 @@
         "streambuf": "cpp",
         "cinttypes": "cpp",
         "typeindex": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "ratio": "cpp",
+        "unordered_set": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
