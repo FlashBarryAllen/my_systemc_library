@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.9)
+project(sc_pratice)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
+add_executable(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/sc_main.cpp)
+find_library(SYSTEMC_LIB systemc PATHS /00_ycl/02_install/systemc-2.3.3/lib-linux64)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${SYSTEMC_LIB})
+target_include_directories(${PROJECT_NAME} PUBLIC "/00_ycl/02_install/systemc-2.3.3/include")

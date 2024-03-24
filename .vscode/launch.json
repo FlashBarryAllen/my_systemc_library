@@ -10,6 +10,8 @@
             "request": "launch",
             //"program": "${workspaceFolder}/build/stat",
             "program": "${workspaceFolder}/build/srv_cpu",
+            //"program": "${workspaceFolder}/build/delay",
+            //"program": "${workspaceFolder}/build/classs",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",

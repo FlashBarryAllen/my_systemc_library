@@ -19,18 +19,20 @@ public:
         m_freq = freq;
     }
 
-    void delay(transaction_type& trans, const int t)
+    void delay(transaction_type trans, const int t)
     {
+        std::shared_ptr<transaction_type> payload = std::make_shared<transaction_type>(trans);
         sc_time period = sc_time(1.0 * 1000 / m_freq, SC_NS);
-        m_scheduled_events.insert(pair_type(t * period + sc_core::sc_time_stamp(), &trans));
+        m_scheduled_events.insert(pair_type(t * period + sc_core::sc_time_stamp(), payload));
     }
 
-    void delay(transaction_type& trans)
+    void delay(transaction_type trans)
     {
-        m_scheduled_events.insert(pair_type(sc_core::sc_time_stamp(), &trans));
+        std::shared_ptr<transaction_type> payload = std::make_shared<transaction_type>(trans);
+        m_scheduled_events.insert(pair_type(sc_core::sc_time_stamp(), payload));
     }
 
-    transaction_type* get_next_transaction()
+    std::shared_ptr<transaction_type> get_next_transaction()
     {
         if (m_scheduled_events.empty()) {
             return nullptr;
@@ -39,7 +41,7 @@ public:
         sc_core::sc_time now = sc_core::sc_time_stamp();
 
         if (m_scheduled_events.begin()->first <= now) {
-            transaction_type* trans = m_scheduled_events.begin()->second;
+            std::shared_ptr<transaction_type> trans = m_scheduled_events.begin()->second;
             m_scheduled_events.erase(m_scheduled_events.begin());
             return trans;
         } else {
@@ -54,11 +56,10 @@ public:
 
 private:
     int        m_freq;
-    std::multimap<const sc_core::sc_time, transaction_type*> m_scheduled_events;
+    std::multimap<const sc_core::sc_time, std::shared_ptr<transaction_type>> m_scheduled_events;
 
 private:
-    typedef std::pair<const sc_core::sc_time, transaction_type*> pair_type;
-
+    typedef std::pair<const sc_core::sc_time, std::shared_ptr<transaction_type>> pair_type;
 };
 
 }
