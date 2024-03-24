@@ -3,11 +3,10 @@ cmake_minimum_required(VERSION 3.10)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-project(sp)
+project(hash)
 
 add_executable(${PROJECT_NAME} 
-    #${CMAKE_SOURCE_DIR}/stl.cpp
-    ${CMAKE_SOURCE_DIR}/cast.cpp
+    ${CMAKE_SOURCE_DIR}/main.cpp
 )
 
 find_library(SYSTEMC_LIB systemc PATHS /00_ycl/04_install/systemc-2.3.4/lib-linux64)
