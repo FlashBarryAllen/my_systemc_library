@@ -15,5 +15,4 @@ target_link_libraries(${PROJECT_NAME} PUBLIC ${SYSTEMC_LIB})
 target_include_directories(${PROJECT_NAME} PUBLIC
                           "${CMAKE_SOURCE_DIR}/include/"
                           "/00_ycl/04_install/systemc-2.3.4/include"
-                          )          
-#target_compile_options(${PROJECT_NAME} PRIVATE "-std=c++17" "-g")                
+                          )             
