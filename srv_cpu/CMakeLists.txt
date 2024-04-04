@@ -13,6 +13,6 @@ find_library(SYSTEMC_LIB systemc PATHS /00_ycl/04_install/systemc-2.3.4/lib-linu
 target_link_libraries(${PROJECT_NAME} PUBLIC ${SYSTEMC_LIB})  
 
 target_include_directories(${PROJECT_NAME} PUBLIC
-                          "${CMAKE_SOURCE_DIR}/include/"
+                          "${CMAKE_SOURCE_DIR}/peq/"
                           "/00_ycl/04_install/systemc-2.3.4/include"
                           )             
