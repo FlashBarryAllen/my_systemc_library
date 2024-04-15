@@ -15,6 +15,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC ${SYSTEMC_LIB})
 
 target_include_directories(${PROJECT_NAME} PUBLIC
                           "${CMAKE_SOURCE_DIR}/include/"
+                          "${CMAKE_SOURCE_DIR}/peq/"
                           "/00_ycl/02_install/systemc-2.3.3/include"
                           "/00_ycl/02_install/systemc-2.3.3/include/sysc/utils"
                           )             

@@ -26,6 +26,8 @@ int sc_main(int args, char* argv[])
 
             std::cout << "(" << in << ", " << out << ")" << std::endl;
         }
+
+        std::cout << std::endl;
     }
 
     return 0;
