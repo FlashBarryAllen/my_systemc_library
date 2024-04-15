@@ -2,6 +2,7 @@
 
 int sc_main(int args, char* argv[])
 {
+
     islip* myislip = new islip(4, 4);
     myislip->init_priority_ptr();
 
@@ -30,6 +31,7 @@ int sc_main(int args, char* argv[])
     return 0;
 
     std::cout << "hello server cpu" << std::endl;
+
     top srv_top("srv_top");
 
     sc_start(10, sc_core::SC_NS);
