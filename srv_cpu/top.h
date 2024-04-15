@@ -4,6 +4,7 @@
 #include <memory>
 #include "src.h"
 #include "tgt.h"
+#include "islip.h"
 
 class top : public sc_core::sc_module
 {
