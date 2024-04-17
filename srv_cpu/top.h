@@ -5,6 +5,7 @@
 #include "src.h"
 #include "tgt.h"
 #include "islip.h"
+#include "test.h"
 
 class my_src : public src
 {

@@ -17,13 +17,7 @@ class src : public sc_core::sc_module
             dont_initialize();
         }
 
-        virtual void mth_entry() {
-
-            /* vector af fun test */
-            vector<int> vec = {1, 2, 3};
-            int n1 = vec.at(1);
-            int n2 = vec.at(10);
-            
+        virtual void mth_entry() {            
             auto p_api = new MY_API_T();
             p_api->msg.type = DATA_MSG;
 
