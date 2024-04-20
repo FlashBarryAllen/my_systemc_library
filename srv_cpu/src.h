@@ -1,6 +1,7 @@
 #ifndef SRC_H
 #define SRC_H
 
+#include <time.h>
 #include <systemc>
 #include <tlm>
 #include <tlm_utils/simple_initiator_socket.h>
@@ -21,7 +22,9 @@ class src : public sc_core::sc_module
             m_logger->set_pattern("[%H:%M:%S %z] [%^%L%$] [thread %t] %v");
         }
 
-        virtual void mth_entry() {            
+        virtual void mth_entry() {    
+            cal_speed();
+
             auto p_api = new MY_API_T();
             p_api->msg.type = DATA_MSG;
 
@@ -45,6 +48,17 @@ class src : public sc_core::sc_module
                 m_credit--;
                 m_val++;
             }
+        }
+
+        void cal_speed() {
+            struct timespec ts;
+            clock_gettime(CLOCK_REALTIME, &ts);
+
+            std::cout << "当前时间：" << ts.tv_sec << "." << ts.tv_nsec << std::endl;
+
+            double cur_us = sc_core::sc_time_stamp().to_seconds() * 10e6;
+            
+            std::cout << cur_us << std::endl;
         }
 
         virtual tlm::tlm_sync_enum nb_transport_bw(tlm::tlm_generic_payload& trans, tlm::tlm_phase& phase,
@@ -73,6 +87,7 @@ class src : public sc_core::sc_module
     public:
         int m_val;
         int m_credit;
+        struct timespec m_now_ts;
         sc_core::sc_in_clk m_clk;
         tlm_utils::simple_initiator_socket<src> m_src_sk;
         std::shared_ptr<spdlog::logger> m_logger;
