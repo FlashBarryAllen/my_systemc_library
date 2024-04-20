@@ -5,13 +5,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 project(srv_cpu)
 
+include_directories("../include/")
 include_directories("../include/systemc/")
+include_directories("../include/spdlog/")
 include_directories("${CMAKE_SOURCE_DIR}/common/")
 include_directories("${CMAKE_SOURCE_DIR}/peq/")
 include_directories("${CMAKE_SOURCE_DIR}/islip/")
 include_directories("${CMAKE_SOURCE_DIR}/test/")
 
 link_directories("../libs/systemc/")
+link_directories("../libs/spdlog/")
 
 add_executable(${PROJECT_NAME} 
     ${CMAKE_SOURCE_DIR}/main.cpp
@@ -21,3 +24,4 @@ add_executable(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME} debug pthread            optimized pthread)
 target_link_libraries(${PROJECT_NAME} debug libsystemc_debug.a optimized libsystemc.a)
+target_link_libraries(${PROJECT_NAME} debug libspdlog.a        optimized libspdlog.a)

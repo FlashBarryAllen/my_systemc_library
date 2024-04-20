@@ -1,7 +1,9 @@
-#ifndef COMMON_H
-#define COMMON_H
+#ifndef COMMON_TYPE_H
+#define COMMON_TYPE_H
 
 #include <memory>
+#include "spdlog.h"
+#include "spdlog/sinks/basic_file_sink.h"
 
 using namespace std;
 using namespace sc_core;

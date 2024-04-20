@@ -4,7 +4,7 @@
 #include <systemc>
 #include <tlm>
 #include <tlm_utils/simple_initiator_socket.h>
-#include "common.h"
+#include "common_type.h"
 
 class src : public sc_core::sc_module
 {
@@ -15,6 +15,10 @@ class src : public sc_core::sc_module
             SC_METHOD(mth_entry);
             sensitive << m_clk.pos();
             dont_initialize();
+
+            m_logger = spdlog::basic_logger_mt(this->name(), std::string("logs/") + this->name() + ".log", true);
+            m_logger->set_level(spdlog::level::info);
+            m_logger->set_pattern("[%H:%M:%S %z] [%^%L%$] [thread %t] %v");
         }
 
         virtual void mth_entry() {            
@@ -28,6 +32,7 @@ class src : public sc_core::sc_module
             
             p_api->dat = p_dat;
             std::cout << "[SRC][SND] cycle:" << sc_time_stamp() << " a:" << p_dat->a << std::endl;
+            m_logger->info("SRC print");
 
             tlm::tlm_generic_payload trans;
             trans.set_command(tlm::TLM_WRITE_COMMAND);
@@ -70,6 +75,7 @@ class src : public sc_core::sc_module
         int m_credit;
         sc_core::sc_in_clk m_clk;
         tlm_utils::simple_initiator_socket<src> m_src_sk;
+        std::shared_ptr<spdlog::logger> m_logger;
 };
 
 #endif
