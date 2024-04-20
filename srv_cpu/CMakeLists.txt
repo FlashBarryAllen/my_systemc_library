@@ -18,6 +18,8 @@ link_directories("../libs/spdlog/")
 
 add_executable(${PROJECT_NAME} 
     ${CMAKE_SOURCE_DIR}/main.cpp
+    ${CMAKE_SOURCE_DIR}/src.cpp
+    ${CMAKE_SOURCE_DIR}/tgt.cpp
     ${CMAKE_SOURCE_DIR}/islip/islip.cpp
     ${CMAKE_SOURCE_DIR}/test/test.cpp
 )

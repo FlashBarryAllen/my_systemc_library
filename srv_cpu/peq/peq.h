@@ -3,6 +3,7 @@
 
 #include <systemc>
 #include <map>
+#include <memory>
 
 using namespace std;
 using namespace sc_core;

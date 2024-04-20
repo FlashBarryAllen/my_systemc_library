@@ -9,6 +9,8 @@ int sc_main(int args, char* argv[])
     top srv_top("srv_top");
 
     sc_start(10, sc_core::SC_NS);
+
+    std::cout << "done" << std::endl;
     
     return 0;
 }
