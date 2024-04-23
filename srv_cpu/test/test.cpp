@@ -1,6 +1,5 @@
 
 #include "test.h"
-#include "network.h"
 
 // Function to perform diagonal propagation on a matrix
 void diagonalPropagation(vector<vector<double>> &matrix) {
@@ -97,4 +96,30 @@ void TEST_encap_pkt()
     EncapsulatePacket(data, dstMac, srcMac, sourceIP, destinationIP, sourcePort, destinationPort);
 
     return;
+}
+
+void TEST_sch()
+{
+    basic_sch sch = basic_sch(3);
+
+    sch.set_val(0, 100);
+    sch.set_val(1, 200);
+    sch.set_val(2, 300);
+
+    for (int i = 0; i < 6; i++) {
+        int sch_ret = sch.rr_sch();
+
+        if (sch_ret == -1) {
+            continue;
+        }
+
+        int val = sch.m_input[sch_ret].front();
+        sch.m_input[sch_ret].pop_front();
+
+        std::cout << sch_ret << ", " << val << std::endl;
+
+        sch.set_val(0, 400);
+        sch.set_val(1, 500);
+        sch.set_val(2, 600);
+    }
 }

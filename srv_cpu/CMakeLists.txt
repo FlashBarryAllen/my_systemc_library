@@ -13,6 +13,7 @@ include_directories("${CMAKE_SOURCE_DIR}/peq/")
 include_directories("${CMAKE_SOURCE_DIR}/islip/")
 include_directories("${CMAKE_SOURCE_DIR}/test/")
 include_directories("${CMAKE_SOURCE_DIR}/network/")
+include_directories("${CMAKE_SOURCE_DIR}/sch/")
 
 link_directories("../libs/systemc/")
 link_directories("../libs/spdlog/")
@@ -24,6 +25,7 @@ add_executable(${PROJECT_NAME}
     ${CMAKE_SOURCE_DIR}/islip/islip.cpp
     ${CMAKE_SOURCE_DIR}/test/test.cpp
     ${CMAKE_SOURCE_DIR}/network/network.cpp
+    ${CMAKE_SOURCE_DIR}/sch/sch.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} debug pthread            optimized pthread)
