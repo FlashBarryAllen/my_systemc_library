@@ -5,6 +5,7 @@ int sc_main(int args, char* argv[])
     std::cout << "hello server cpu" << std::endl;
 
     //TEST_islip();
+    TEST_encap_pkt();
 
     top srv_top("srv_top");
 

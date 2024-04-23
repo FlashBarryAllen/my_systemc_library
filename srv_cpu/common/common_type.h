@@ -4,6 +4,7 @@
 #include <memory>
 #include "spdlog.h"
 #include "spdlog/sinks/basic_file_sink.h"
+#include "network.h"
 
 using namespace std;
 using namespace sc_core;

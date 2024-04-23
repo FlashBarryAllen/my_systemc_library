@@ -1,5 +1,6 @@
 
 #include "test.h"
+#include "network.h"
 
 // Function to perform diagonal propagation on a matrix
 void diagonalPropagation(vector<vector<double>> &matrix) {
@@ -77,6 +78,23 @@ void TEST_islip()
 
         std::cout << std::endl;
     }
+
+    return;
+}
+
+void TEST_encap_pkt()
+{
+    const string data = "12345678";
+    uint8_t* dstMac = new uint8_t[6];
+    dstMac[0] = 12;
+    uint8_t* srcMac = new uint8_t[6];
+    srcMac[0] = 45;
+    uint32_t sourceIP = 1020;
+    uint32_t destinationIP = 3040;
+    uint16_t sourcePort = 5555;
+    uint16_t destinationPort = 80;
+
+    EncapsulatePacket(data, dstMac, srcMac, sourceIP, destinationIP, sourcePort, destinationPort);
 
     return;
 }

@@ -11,4 +11,6 @@ void TEST_dpa();
 
 void TEST_islip();
 
+void TEST_encap_pkt();
+
 #endif
