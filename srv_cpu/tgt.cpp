@@ -1,6 +1,6 @@
 #include "tgt.h"
 
-tgt::tgt(sc_core::sc_module_name name) : m_tgt_sk("tgt_sk"), m_peq("peq"), m_crdt_sch_cycle(2)
+tgt::tgt(sc_core::sc_module_name name) : m_crdt_sch_cycle(2)
     , m_cycle_cnt(0) {
     m_tgt_sk.register_nb_transport_fw(this, &tgt::nb_transport_fw);
     SC_METHOD(mth_entry);
@@ -93,5 +93,27 @@ tlm::tlm_sync_enum tgt::nb_transport_fw(tlm::tlm_generic_payload& trans, tlm::tl
         delete p_api;
 
         m_logger->info("[TGT][RCV] cycle: {:d}", m_cycle_cnt);
+        return tlm::TLM_COMPLETED;
+}
+
+B::B(sc_core::sc_module_name name)
+{
+    m_tlm_if.register_nb_transport_fw(this, &B::nb_transport_fw);
+    SC_METHOD(mth_entry);
+    sensitive << m_clk.pos();
+}
+
+B::~B()
+{
+
+}
+
+void B::mth_entry()
+{
+    return;
+}
+
+tlm::tlm_sync_enum B::nb_transport_fw(tlm::tlm_generic_payload& trans, tlm::tlm_phase& phase,
+    sc_core::sc_time& time) {
         return tlm::TLM_COMPLETED;
 }

@@ -19,6 +19,11 @@ public:
         
     }
 
+    peq(const int freq = 1000) : sc_core::sc_object(), m_freq(freq)
+    {
+        
+    }
+
     void set_freq(const int freq) {
         m_freq = freq;
     }
