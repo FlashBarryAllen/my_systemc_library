@@ -5,6 +5,8 @@
 #include <vector>
 #include "islip.h"
 #include "dpa.h"
+#include "sch.h"
+#include "network.h"
 
 using namespace std;
 
