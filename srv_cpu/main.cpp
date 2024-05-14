@@ -10,6 +10,8 @@ int sc_main(int args, char* argv[])
     //TEST_islip();
     TEST_encap_pkt();
 
+    TEST_sch();
+
     top srv_top("srv_top");
 
     sc_start(10, sc_core::SC_NS);

@@ -33,4 +33,19 @@ class tgt : public sc_core::sc_module
         std::shared_ptr<spdlog::logger> m_logger;
 };
 
+class B : public sc_core::sc_module
+{
+    public:
+        SC_HAS_PROCESS(B);
+        B(sc_core::sc_module_name name);
+        ~B();
+        void mth_entry();
+        virtual tlm::tlm_sync_enum nb_transport_fw(tlm::tlm_generic_payload& trans, tlm::tlm_phase& phase,
+            sc_core::sc_time& time);
+    
+    public:
+        sc_core::sc_in_clk m_clk;
+        tlm_utils::simple_target_socket<B> m_tlm_if;
+};
+
 #endif
