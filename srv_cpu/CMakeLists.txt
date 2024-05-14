@@ -11,6 +11,7 @@ include_directories("../include/spdlog/")
 include_directories("${CMAKE_SOURCE_DIR}/common/")
 include_directories("${CMAKE_SOURCE_DIR}/peq/")
 include_directories("${CMAKE_SOURCE_DIR}/islip/")
+include_directories("${CMAKE_SOURCE_DIR}/dpa/")
 include_directories("${CMAKE_SOURCE_DIR}/test/")
 include_directories("${CMAKE_SOURCE_DIR}/network/")
 
@@ -22,6 +23,7 @@ add_executable(${PROJECT_NAME}
     ${CMAKE_SOURCE_DIR}/src.cpp
     ${CMAKE_SOURCE_DIR}/tgt.cpp
     ${CMAKE_SOURCE_DIR}/islip/islip.cpp
+    ${CMAKE_SOURCE_DIR}/dpa/dpa.cpp
     ${CMAKE_SOURCE_DIR}/test/test.cpp
     ${CMAKE_SOURCE_DIR}/network/network.cpp
 )

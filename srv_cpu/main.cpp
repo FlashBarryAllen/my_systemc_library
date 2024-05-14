@@ -1,8 +1,11 @@
 #include "top.h"
 
+
 int sc_main(int args, char* argv[])
 {
     std::cout << "hello server cpu" << std::endl;
+
+    TEST_dpa();
 
     //TEST_islip();
     TEST_encap_pkt();
