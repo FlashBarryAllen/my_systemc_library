@@ -24,8 +24,9 @@ public:
 private:
     int num_ports_;
     std::vector<bool> priority_vec_;
+    std::vector<std::vector<bool>> requests_;
     std::vector<std::vector<bool>> grants_;
-    std::vector<bool> requests_;
+    
 
     // Helper functions (declared here for encapsulation)
     int GetPriorityIndex(int i, int j) const;

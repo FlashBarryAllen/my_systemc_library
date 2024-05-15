@@ -10,23 +10,27 @@ USE ieee.std_logic_unsigned.ALL;
 LIBRARY lpm;
 USE lpm.lpm_components.ALL;
 USE work.voq_input_package.ALL;
+
 ENTITY voq_c_bar IS
- GENERIC (NO_OF_PORTS: INTEGER := 4;
- PRIO_VEC_SIZE: INTEGER := 7 --Has to be [2(NO_OF_PORTS)-1]
-);
- PORT(
- arb_req: IN std_logic_vector(NO_OF_GRANTS_REQ DOWNTO 1);
- clk, reset : IN std_logic;
- grant : OUT std_logic_vector(NO_OF_GRANTS_REQ DOWNTO 1);
- P: OUT std_logic_vector(7 DOWNTO 1)
- );
+    GENERIC (NO_OF_PORTS: INTEGER := 4;
+        PRIO_VEC_SIZE: INTEGER := 7 --Has to be [2(NO_OF_PORTS)-1]
+    );
+
+    PORT(
+        arb_req: IN std_logic_vector(NO_OF_GRANTS_REQ DOWNTO 1);
+        clk, reset : IN std_logic;
+        grant : OUT std_logic_vector(NO_OF_GRANTS_REQ DOWNTO 1);
+        P: OUT std_logic_vector(7 DOWNTO 1)
+    );
 END voq_c_bar;
 
+
+
 ARCHITECTURE behaviour OF voq_c_bar IS
- COMPONENT Arbiter
-PORT(Req, North, West, Mask: IN std_logic;
- South, East, Grant: OUT std_logic);
-END COMPONENT;
+    COMPONENT Arbiter
+        PORT(Req, North, West, Mask: IN std_logic;
+        South, East, Grant: OUT std_logic);
+    END COMPONENT;
 
 --Cross Bar Signal Declarations
 SIGNAL south_2_north : c_bar_signal_array;
@@ -60,20 +64,20 @@ BEGIN
 
  P <= c_bar_P;
 --This process rotates the priority vector
- Active_Win : process (clk, reset)
- BEGIN
- if reset = '0' then
- c_bar_P <= "0000000";
- elsif (clk = '1' and clk'event) then
- case c_bar_P is
- when "1111000" => c_bar_P <= "0111100";
- when "0111100" => c_bar_P <= "0011110";
- when "0011110" => c_bar_P <= "0001111";
- when "0001111" => c_bar_P <= "1111000";
- when others => c_bar_P <= "1111000";
- end case;
- end if;
- end process;
+    Active_Win : process (clk, reset)
+        BEGIN
+        if reset = '0' then
+            c_bar_P <= "0000000";
+        elsif (clk = '1' and clk'event) then
+            case c_bar_P is
+            when "1111000" => c_bar_P <= "0111100";
+            when "0111100" => c_bar_P <= "0011110";
+            when "0011110" => c_bar_P <= "0001111";
+            when "0001111" => c_bar_P <= "1111000";
+            when others => c_bar_P <= "1111000";
+            end case;
+        end if;
+    end process;
 High <= '1';
 
 --*************** Arbiter instantiation ************************************
