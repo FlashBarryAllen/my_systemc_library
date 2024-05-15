@@ -107,13 +107,11 @@ void TEST_dpa()
     } else {
         std::cout << "Input 0 is not granted access." << std::endl;
     }
-
     if (arbiter3.HasGranted(1, 2)) {
         std::cout << "Input 1 is granted access to output 2." << std::endl;
     } else {
         std::cout << "Input 1 is not granted access." << std::endl;
     }
-
     if (arbiter3.HasGranted(2, 2)) {
         std::cout << "Input 2 is granted access to output 2." << std::endl;
     } else {
