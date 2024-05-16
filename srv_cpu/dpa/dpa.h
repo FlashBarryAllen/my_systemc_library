@@ -1,36 +1,28 @@
+/* implement diagonal propagation arbiter */
 #ifndef DPA_H
 #define DPA_H
 
 #include <vector>
 
-class Arbiter; // Forward declaration
+class ArbiterCell; // Forward declaration
 
-class VoqCBar {
+class DPA {
 public:
-    // Constructor with parameters for number of ports and priority vector
-    VoqCBar(int num_ports, const std::vector<bool>& priority_vec);
-
-    // Function to request access from a specific input port to an output port
+    DPA(int input_port, int output_port);
+    void init();
     void Request(int input_port, int output_port);
-
-    // Function to check if a specific input port is granted access to an output port
-    bool HasGranted(int input_port, int output_port);
-
-    // Function to perform the arbitration for all ports
     void Arbitrate();
+    int HasGranted(int input_port, int output_port);
+    int IsValidPort(int port) const;
 
-    void rotatePriorityVector();
-
-private:
-    int num_ports_;
-    std::vector<bool> priority_vec_;
-    std::vector<std::vector<bool>> requests_;
-    std::vector<std::vector<bool>> grants_;
-    
-
-    // Helper functions (declared here for encapsulation)
-    int GetPriorityIndex(int i, int j) const;
-    bool IsValidPort(int port) const;
+public:
+    int m_ptr;
+    std::vector<int> m_row_mask;
+    std::vector<int> m_col_mask;
+    int m_num_ports;
+    std::vector<std::vector<ArbiterCell*>> m_arbiter_cells;
+    std::vector<std::vector<int>> m_requests;
+    std::vector<std::vector<int>> m_grants;
 };
 
 #endif // DPA_H

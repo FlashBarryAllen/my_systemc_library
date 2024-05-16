@@ -50,20 +50,38 @@ void TEST_dpa()
 
     // Test case 1: Basic functionality
     std::cout << "Test case 1: Basic functionality" << std::endl;
-    VoqCBar arbiter1(4, {true, true, true, true, true, true, true});
-    arbiter1.rotatePriorityVector();
-    arbiter1.rotatePriorityVector();
-    arbiter1.rotatePriorityVector();
-    arbiter1.rotatePriorityVector();
-    arbiter1.rotatePriorityVector();
+    DPA arbiter1(4, 4);
+    arbiter1.Request(0, 2);
+    arbiter1.Request(0, 3);
+    arbiter1.Request(1, 0);
     arbiter1.Request(1, 2);
     arbiter1.Request(2, 0);
-    arbiter1.Arbitrate();
+    arbiter1.Request(2, 1);
+    arbiter1.Request(2, 3);
+    arbiter1.Request(3, 1);
+    arbiter1.Request(3, 3);
+
+    for (int i = 0; i < arbiter1.m_num_ports; i++) {
+        std::cout << arbiter1.m_ptr << std::endl;
+        arbiter1.Arbitrate();
+        bool grant_0_2 = arbiter1.HasGranted(0, 2);
+        bool grant_0_3 = arbiter1.HasGranted(0, 3);
+        bool grant_1_0 = arbiter1.HasGranted(1, 0);
+        bool grant_1_2 = arbiter1.HasGranted(1, 2);
+        bool grant_2_0 = arbiter1.HasGranted(2, 0);
+        bool grant_2_1 = arbiter1.HasGranted(2, 1);
+        bool grant_2_3 = arbiter1.HasGranted(2, 3);
+        bool grant_3_1 = arbiter1.HasGranted(3, 1);
+        bool grant_3_3 = arbiter1.HasGranted(3, 3);
+        std::cout << arbiter1.m_ptr << std::endl;
+    }
+    
     if (arbiter1.HasGranted(1, 2)) {
         std::cout << "Input 1 is granted access to output 2." << std::endl;
     } else {
         std::cout << "Input 1 is not granted access." << std::endl;
     }
+    
     if (arbiter1.HasGranted(2, 0)) {
         std::cout << "Input 2 is granted access to output 0." << std::endl;
     } else {
@@ -85,7 +103,7 @@ void TEST_dpa()
 
     // Test case 3: No requests
     std::cout << "\nTest case 3: No requests" << std::endl;
-    VoqCBar arbiter2(2, {true, false});
+    DPA arbiter2(2, 2);
     arbiter2.Arbitrate();
     for (int i = 0; i < 2; ++i) {
         for (int j = 0; j < 2; ++j) {
@@ -97,7 +115,7 @@ void TEST_dpa()
 
     // Test case 4: Multiple requests for the same output port
     std::cout << "\nTest case 4: Multiple requests for the same output port" << std::endl;
-    VoqCBar arbiter3(3, {true, false, true});
+    DPA arbiter3(3, 3);
     arbiter3.Request(0, 2);
     arbiter3.Request(1, 2);
     arbiter3.Request(2, 2);
