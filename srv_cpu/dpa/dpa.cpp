@@ -5,33 +5,18 @@ class ArbiterCell {
 public:
     ArbiterCell()
     {
-        m_north = 0;
-        m_west  = 0;
-        m_south = 0;
-        m_east  = 0;
     }
 
     // Function to arbitrate m_requests based on request signal, north and west
-    int Grant(int request, int north, int west, int rm, int lm) {
-        m_north = north;
-        m_west  = west;
-        m_south = m_north | (request & !m_west);
-        m_east  = m_west  | (request & !m_north);
-
-        int grant = false;
+    int Grant(int request, int rm, int lm) {
+        int grant = 0;
 
         if (rm && lm) {
-           grant = request & !north & !west;
+           grant = request;
         }
 
         return grant;
     }
-
-public:
-    int m_north;
-    int m_west;
-    int m_south;
-    int m_east;
 };
 
 DPA::DPA(int input_port, int output_port)
@@ -50,6 +35,19 @@ DPA::DPA(int input_port, int output_port)
         for (int col = 0; col < m_num_ports; col++) {
             m_arbiter_cells[row][col] = new ArbiterCell();
         }
+    }
+
+    m_dpa_map.resize(2 * m_num_ports - 1, std::vector<int>(m_num_ports, 0));
+    int num = 0;
+    for (int row = m_num_ports - 1; row < 2* m_num_ports - 1; row++) {
+        for (int col = 0; col < m_num_ports; col++) {
+            m_dpa_map[row][col] = num;
+            num++;
+        }
+    }
+
+    for (int row = 0; row < m_num_ports - 1; row++) {
+        m_dpa_map[row] = m_dpa_map[row + m_num_ports];
     }
 }
 
@@ -74,12 +72,6 @@ void DPA::init()
     for (int row = 0; row < m_num_ports; row++) {
         m_row_mask[row] = 1;
         m_col_mask[row] = 1;
-        for (int col = 0; col < m_num_ports; col++) {
-            m_arbiter_cells[row][col]->m_north = 0;
-            m_arbiter_cells[row][col]->m_west  = 0;
-            m_arbiter_cells[row][col]->m_south = 0;
-            m_arbiter_cells[row][col]->m_east  = 0;
-        }
     }
 }
 
@@ -92,15 +84,19 @@ void DPA::Arbitrate()
     for (int row = m_ptr; row < m_num_ports; row++) {
         times++;
         for (int col = 0; col < m_num_ports; col++) {
-            int request = m_requests[row][col];
-            int north = (row > 0) ? m_arbiter_cells[row - 1][col]->m_south : 0;
-            int west  = (col > 0) ? m_arbiter_cells[row][col - 1]->m_east : 0;
-            int grant = m_arbiter_cells[row][col]->Grant(request, north, west, m_row_mask[row], m_col_mask[col]);
-            m_grants[row][col] = grant;
+            int cur_index = m_dpa_map[row + m_num_ports - 1 - col][col];
+            int i = cur_index / m_num_ports;
+            int j = cur_index % m_num_ports;
+            //std::cout << index << std::endl;
+
+            int request = m_requests[i][j];
+
+            int grant = m_arbiter_cells[row][col]->Grant(request, m_row_mask[i], m_col_mask[j]);
+            m_grants[i][j] = grant;
 
             if (grant) {
-                m_row_mask[row] = 0;
-                m_col_mask[col] = 0;
+                m_row_mask[i] = 0;
+                m_col_mask[j] = 0;
             }
         }
     }
@@ -108,11 +104,14 @@ void DPA::Arbitrate()
     int left_times = m_num_ports - times;
     for (int row = 0; row < left_times; row++) {
         for (int col = 0; col < m_num_ports; col++) {
-            int request = m_requests[row][col];
-            int north = (row > 0) ? m_arbiter_cells[row - 1][col]->m_south : 0;
-            int west  = (col > 0) ? m_arbiter_cells[row][col - 1]->m_east : 0;
-            int grant = m_arbiter_cells[row][col]->Grant(request, north, west, m_row_mask[row], m_col_mask[col]);
-            m_grants[row][col] = grant;
+            int cur_index = m_dpa_map[row + m_num_ports - 1 - col][col];
+            int i = cur_index / m_num_ports;
+            int j = cur_index % m_num_ports;
+
+            int request = m_requests[i][j];
+
+            int grant = m_arbiter_cells[row][col]->Grant(request, m_row_mask[i], m_col_mask[j]);
+            m_grants[i][j] = grant;
 
             if (grant) {
                 m_row_mask[row] = 0;

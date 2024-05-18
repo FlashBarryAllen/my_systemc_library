@@ -61,9 +61,17 @@ void TEST_dpa()
     arbiter1.Request(3, 1);
     arbiter1.Request(3, 3);
 
-    for (int i = 0; i < arbiter1.m_num_ports; i++) {
+    for (int i = 0; i < arbiter1.m_num_ports * 2; i++) {
         std::cout << arbiter1.m_ptr << std::endl;
         arbiter1.Arbitrate();
+        for (int row = 0; row < arbiter1.m_num_ports; row++) {
+            for (int col = 0; col < arbiter1.m_num_ports; col++) {
+                std::cout << arbiter1.m_grants[row][col] << ", ";
+            }
+
+            std::cout << " " << std::endl;
+        }
+        
         bool grant_0_2 = arbiter1.HasGranted(0, 2);
         bool grant_0_3 = arbiter1.HasGranted(0, 3);
         bool grant_1_0 = arbiter1.HasGranted(1, 0);
@@ -73,7 +81,6 @@ void TEST_dpa()
         bool grant_2_3 = arbiter1.HasGranted(2, 3);
         bool grant_3_1 = arbiter1.HasGranted(3, 1);
         bool grant_3_3 = arbiter1.HasGranted(3, 3);
-        std::cout << arbiter1.m_ptr << std::endl;
     }
     
     if (arbiter1.HasGranted(1, 2)) {

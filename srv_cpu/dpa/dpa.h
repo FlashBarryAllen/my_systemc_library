@@ -23,6 +23,7 @@ public:
     std::vector<std::vector<ArbiterCell*>> m_arbiter_cells;
     std::vector<std::vector<int>> m_requests;
     std::vector<std::vector<int>> m_grants;
+    std::vector<std::vector<int>> m_dpa_map;
 };
 
 #endif // DPA_H
