@@ -1,5 +1,16 @@
 
 #include "test.h"
+#include <gtest/gtest.h>
+
+int Add(int a, int b)
+{
+    return a + b;
+}
+
+TEST(AddTest, Basic) {
+    std::cout << "test gtest" << std::endl;
+  EXPECT_EQ(Add(1, 2), 3);
+}
 
 // Function to perform diagonal propagation on a matrix
 void diagonalPropagation(vector<vector<double>> &matrix) {

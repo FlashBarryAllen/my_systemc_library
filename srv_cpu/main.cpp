@@ -1,10 +1,20 @@
 #include "top.h"
+#include "gtest/gtest.h"
+using ::testing::EmptyTestEventListener;
+using ::testing::InitGoogleTest;
+using ::testing::Test;
+using ::testing::TestEventListeners;
+using ::testing::TestInfo;
+using ::testing::TestPartResult;
+using ::testing::UnitTest;
 
 
-int sc_main(int args, char* argv[])
+int sc_main(int argc, char* argv[])
 {
-    std::cout << "hello server cpu" << std::endl;
+    InitGoogleTest(&argc, argv);
+    int ret_val = RUN_ALL_TESTS();
 
+    std::cout << "hello server cpu" << std::endl;
     TEST_dpa();
 
     //TEST_islip();

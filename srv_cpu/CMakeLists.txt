@@ -4,6 +4,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 project(srv_cpu)
+enable_testing()
 
 include_directories("../include/")
 include_directories("../include/systemc/")
@@ -30,6 +31,7 @@ add_executable(${PROJECT_NAME}
     ${CMAKE_SOURCE_DIR}/sch/sch.cpp
 )
 
+target_link_libraries(${PROJECT_NAME} debug gtest              optimized gtest)
 target_link_libraries(${PROJECT_NAME} debug pthread            optimized pthread)
 target_link_libraries(${PROJECT_NAME} debug libsystemc_debug.a optimized libsystemc.a)
 target_link_libraries(${PROJECT_NAME} debug libspdlog.a        optimized libspdlog.a)
