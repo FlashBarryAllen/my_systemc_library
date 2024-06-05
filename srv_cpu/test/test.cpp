@@ -1,15 +1,32 @@
 
 #include "test.h"
 #include <gtest/gtest.h>
+#include <bitset>
 
 int Add(int a, int b)
 {
     return a + b;
 }
 
-TEST(AddTest, Basic) {
+int bittest()
+{
+}
+
+TEST(AddTest, Basic)
+{
     std::cout << "test gtest" << std::endl;
-  EXPECT_EQ(Add(1, 2), 3);
+    EXPECT_EQ(Add(1, 2), 3);
+}
+
+TEST(bittest, Basic)
+{
+    std::cout << "hi gtest" << std::endl;
+    std::bitset<10> mybitset;
+    mybitset.set(1);
+    int index = mybitset._Find_first();
+    mybitset.reset(1);
+
+    std::cout << mybitset << std::endl;
 }
 
 void TEST_dpa()
@@ -184,5 +201,57 @@ void TEST_sch()
         sch.set_val(0, 400);
         sch.set_val(1, 500);
         sch.set_val(2, 600);
+    }
+}
+
+#include <iostream>
+#include <chrono>
+#include <thread>
+#include <mutex>
+
+class TokenBucket {
+public:
+    TokenBucket(double rate, double capacity)
+        : rate(rate), capacity(capacity), tokens(capacity), 
+          last_time(std::chrono::steady_clock::now()) {}
+
+    bool consume(double tokens) {
+        std::lock_guard<std::mutex> lock(mutex);
+        add_tokens();
+        if (this->tokens >= tokens) {
+            this->tokens -= tokens;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+private:
+    void add_tokens() {
+        auto now = std::chrono::steady_clock::now();
+        std::chrono::duration<double> elapsed = now - last_time;
+        double new_tokens = elapsed.count() * rate;
+        tokens = std::min(capacity, tokens + new_tokens);
+        last_time = now;
+    }
+
+    double rate;
+    double capacity;
+    double tokens;
+    std::chrono::steady_clock::time_point last_time;
+    std::mutex mutex;
+};
+
+TEST(tokenbucket, basic)
+{
+    TokenBucket bucket(5, 10); // 每秒生成5个令牌，桶的容量为10个令牌
+
+    while (true) {
+        if (bucket.consume(1)) {
+            std::cout << "发送数据包" << std::endl;
+        } else {
+            std::cout << "令牌不足，等待..." << std::endl;
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(100)); // 每0.1秒尝试发送一个数据包
     }
 }
