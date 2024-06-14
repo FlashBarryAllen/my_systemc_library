@@ -9,6 +9,8 @@ enable_testing()
 include_directories("../include/")
 include_directories("../include/systemc/")
 include_directories("../include/spdlog/")
+include_directories("../include/gtest/")
+include_directories("../include/gmock/")
 include_directories("${CMAKE_SOURCE_DIR}/common/")
 include_directories("${CMAKE_SOURCE_DIR}/peq/")
 include_directories("${CMAKE_SOURCE_DIR}/islip/")
@@ -19,6 +21,8 @@ include_directories("${CMAKE_SOURCE_DIR}/sch/")
 
 link_directories("../libs/systemc/")
 link_directories("../libs/spdlog/")
+link_directories("../libs/gtest/")
+link_directories("../libs/gmock/")
 
 add_executable(${PROJECT_NAME} 
     ${CMAKE_SOURCE_DIR}/main.cpp
