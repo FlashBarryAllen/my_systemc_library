@@ -12,6 +12,7 @@
     //"cmake.sourceDirectory": "/00_ycl/01_github/my_systemc_library/sc_fifo_with_delay",
     "cmake.sourceDirectory": "/00_ycl/00_code/my_systemc_library/srv_cpu",
     //"cmake.sourceDirectory": "/00_ycl/01_github/my_systemc_library/peq_with_get",
+    "cmake.buildDirectory": "/00_ycl/00_code/my_systemc_library/build",
     "files.associations": {
         "queue": "cpp",
         "systemc": "cpp",
