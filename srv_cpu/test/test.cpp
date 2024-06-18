@@ -246,7 +246,7 @@ TEST(tokenbucket, basic)
 {
     TokenBucket bucket(5, 10); // 每秒生成5个令牌，桶的容量为10个令牌
 
-    while (true) {
+    for (int i = 0; i < 20; i++) {
         if (bucket.consume(1)) {
             std::cout << "发送数据包" << std::endl;
         } else {
@@ -254,4 +254,50 @@ TEST(tokenbucket, basic)
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(100)); // 每0.1秒尝试发送一个数据包
     }
+}
+
+#include <iostream>
+#include <queue>
+
+class NetworkNode {
+public:
+    NetworkNode(int capacity) : capacity(capacity), buffer_usage(0) {}
+
+    void sendData(int data) {
+        if (buffer_usage + data <= capacity) {
+            buffer.push(data);
+            buffer_usage += data;
+        } else {
+            std::cout << "Buffer full, sending PFC frame\n";
+            sendPFCFrame();
+        }
+    }
+
+    void receiveData() {
+        if (!buffer.empty()) {
+            int data = buffer.front();
+            buffer.pop();
+            buffer_usage -= data;
+            std::cout << "Data received: " << data << "\n";
+        }
+    }
+
+private:
+    int capacity;
+    int buffer_usage;
+    std::queue<int> buffer;
+
+    void sendPFCFrame() {
+        std::cout << "Pausing data transmission\n";
+        // Implement PFC frame sending logic here
+    }
+};
+
+TEST(PFC, basic) {
+    NetworkNode node(100);
+
+    node.sendData(50);
+    node.sendData(60); // This will trigger PFC frame
+    node.receiveData();
+    node.sendData(60); // Now this will be accepted
 }

@@ -14,6 +14,7 @@
     //"cmake.sourceDirectory": "/00_ycl/01_github/my_systemc_library/peq_with_get",
     "cmake.buildDirectory": "/00_ycl/00_code/my_systemc_library/build",
     "cmake.generator": "Unix Makefiles",
+    "cmake.parallelJobs": 16,
     "files.associations": {
         "queue": "cpp",
         "systemc": "cpp",
