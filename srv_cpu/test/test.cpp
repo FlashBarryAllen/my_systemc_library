@@ -301,3 +301,79 @@ TEST(PFC, basic) {
     node.receiveData();
     node.sendData(60); // Now this will be accepted
 }
+
+#include <iostream>
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+class Queue {
+public:
+    Queue(int capacity, int priority) {
+        this->capacity = capacity;
+        this->priority = priority;
+    }
+
+    void enqueue(int packet) {
+        if (buffer.size() < capacity) {
+            buffer.push(packet);
+        } else {
+            cout << "Queue " << priority << " is full, dropping packet" << endl;
+        }
+    }
+
+    void dequeue() {
+        if (!buffer.empty()) {
+            buffer.pop();
+        }
+    }
+
+    int getRemainingCapacity() const {
+        return capacity - buffer.size();
+    }
+
+public:
+    int capacity;
+    int priority;
+    queue<int> buffer;
+};
+
+class Switch {
+public:
+    Switch(int numQueues) {
+        for (int i = 0; i < numQueues; i++) {
+            queues.push_back(Queue(10, i));
+        }
+    }
+
+    void sendPacket(int packet, int priority) {
+        queues[priority].enqueue(packet);
+
+        // Check if any queue is congested
+        for (const Queue& queue : queues) {
+            if (queue.getRemainingCapacity() <= 0) {
+                sendPFCFrame(queue.priority);
+            }
+        }
+    }
+
+public:
+    void sendPFCFrame(int priority) {
+        cout << "Sending PFC frame to sender of priority " << priority << endl;
+    }
+
+    vector<Queue> queues;
+};
+
+TEST(PFC, Gemini) {
+    Switch myswitch(4);
+
+    // Simulate sending packets
+    for (int i = 0; i < 100; i++) {
+        int priority = rand() % 4;
+        int packet = 1;
+
+        myswitch.sendPacket(packet, priority);
+    }
+}
