@@ -1,7 +1,7 @@
 #include "tgt.h"
 
 tgt::tgt(sc_core::sc_module_name name) : m_crdt_sch_cycle(2), m_cycle_cnt(0) {
-    m_tgt_sk.register_nb_transport_fw(this, &tgt::nb_transport_fw);
+    m_tgt_rx.register_nb_transport_fw(this, &tgt::nb_transport_fw);
     SC_METHOD(mth_entry);
     sensitive << m_clk.pos();
     dont_initialize();
@@ -45,7 +45,7 @@ void tgt::mth_snd_msg() {
         tlm::tlm_phase phase = tlm::BEGIN_REQ;
         sc_time time = SC_ZERO_TIME;
 
-        m_tgt_sk->nb_transport_bw(trans, phase, time);
+        m_tgt_tx->nb_transport_fw(trans, phase, time);
 
         m_snd_ctl.pop_front();
     }
@@ -65,7 +65,7 @@ void tgt::mth_snd_msg() {
         tlm::tlm_phase phase = tlm::BEGIN_REQ;
         sc_time time = SC_ZERO_TIME;
 
-        auto status = m_tgt_sk->nb_transport_bw(trans, phase, time);
+        auto status = m_tgt_tx->nb_transport_fw(trans, phase, time);
         if (status == tlm::TLM_COMPLETED) {
             m_snd_msg_que.pop_front();
         } else {

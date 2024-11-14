@@ -3,6 +3,7 @@
 
 #include <systemc>
 #include <tlm>
+#include <tlm_utils/simple_initiator_socket.h>
 #include <tlm_utils/simple_target_socket.h>
 #include "peq.h"
 #include "common_type.h"
@@ -25,7 +26,8 @@ class tgt : public sc_core::sc_module
         int m_crdt_sch_cycle;
         little_end::peq<MY_DAT_T> m_peq;
         sc_core::sc_in_clk m_clk;
-        tlm_utils::simple_target_socket<tgt> m_tgt_sk;
+        tlm_utils::simple_initiator_socket<tgt> m_tgt_tx;
+        tlm_utils::simple_target_socket<tgt> m_tgt_rx;
         deque<shared_ptr<MY_DAT_T>> m_rcv_dat;
         deque<shared_ptr<MY_API_T>> m_snd_ctl;
         deque<shared_ptr<MY_DAT_T>> m_peq_que;

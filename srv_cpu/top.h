@@ -26,7 +26,8 @@ class top : public sc_core::sc_module {
         t = std::make_shared<tgt>("tgt");
         s->m_clk(*m_clk);
         t->m_clk(*m_clk);
-        s->m_src_sk.bind(t->m_tgt_sk);
+        s->m_src_tx.bind(t->m_tgt_rx);
+        t->m_tgt_tx.bind(s->m_src_rx);
         s->m_credit = 2;
     }
 
