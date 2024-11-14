@@ -10,7 +10,7 @@ src::src(sc_core::sc_module_name name) : m_src_sk("src_sk"), m_val(0), m_credit(
 
     m_logger = spdlog::basic_logger_mt(this->name(), std::string("logs/") + this->name() + ".log", true);
     m_logger->set_level(spdlog::level::info);
-    m_logger->set_pattern("[%H:%M:%S %z] %v");
+    m_logger->set_pattern("[%Y-%m-%d %H:%M:%S] %v");
 }
 
 void src::mth_entry() {  
@@ -27,7 +27,7 @@ void src::mth_entry() {
     
     p_api->dat = p_dat;
 
-    m_logger->info("SRC print a: {:d}", p_dat->a);
+    m_logger->info("SRC print a: 0x{:x}", p_dat->a);
 
     tlm::tlm_generic_payload trans;
     trans.set_command(tlm::TLM_WRITE_COMMAND);

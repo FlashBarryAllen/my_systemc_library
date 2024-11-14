@@ -9,7 +9,7 @@ tgt::tgt(sc_core::sc_module_name name) : m_crdt_sch_cycle(2)
 
     m_logger = spdlog::basic_logger_mt(this->name(), std::string("logs/") + this->name() + ".log", true);
     m_logger->set_level(spdlog::level::info);
-    m_logger->set_pattern("[%H:%M:%S %z] %v");
+    m_logger->set_pattern("[%Y-%m-%d %H:%M:%S] %v");
 }
 
 void tgt::mth_dat_proc()
