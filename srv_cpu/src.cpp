@@ -48,11 +48,11 @@ void src::cal_speed() {
     struct timespec ts;
     clock_gettime(CLOCK_REALTIME, &ts);
 
-    std::cout << "当前时间：" << ts.tv_sec << "." << ts.tv_nsec << std::endl;
+    //std::cout << "当前时间：" << ts.tv_sec << "." << ts.tv_nsec << std::endl;
 
     double cur_us = sc_core::sc_time_stamp().to_seconds() * 10e6;
 
-    std::cout << cur_us << std::endl;
+    //std::cout << cur_us << std::endl;
 }
 
 tlm::tlm_sync_enum src::nb_transport_bw(tlm::tlm_generic_payload& trans,

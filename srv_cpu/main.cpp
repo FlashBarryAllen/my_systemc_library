@@ -24,6 +24,15 @@ int sc_main(int argc, char* argv[])
 
     top srv_top("srv_top");
 
+    A a("aa");
+    BB b("bb");
+    sc_core::sc_clock* clk = new sc_core::sc_clock("clk", 1, sc_core::SC_NS);
+    a.clock(*clk);
+    b.clock(*clk);
+    sc_fifo<int> tx_rx;
+    a.tx(tx_rx);
+    b.rx(tx_rx);
+
     sc_start(10, sc_core::SC_NS);
 
     std::cout << "done" << std::endl;

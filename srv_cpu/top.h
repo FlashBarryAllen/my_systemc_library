@@ -40,4 +40,55 @@ class top : public sc_core::sc_module
         std::shared_ptr<tgt> t;
 };
 
+class A : public sc_core::sc_module
+{
+    public:
+        sc_core::sc_in_clk clock;
+        sc_fifo_out<int>   tx;
+        int                cnt = 0;
+    public:
+        SC_HAS_PROCESS(A);
+        A(sc_core::sc_module_name name)
+        {
+            SC_METHOD(mth_entry);
+            sensitive << clock.pos();
+        }
+
+        void mth_entry()
+        {
+            cnt++;
+            static int i = 0;
+            tx->nb_write(i);
+            std::cout << "cnt: " << cnt << ", AA: " << i << std::endl;
+            i++;
+        }
+};
+
+class BB : public sc_core::sc_module
+{
+    public:
+        sc_core::sc_in_clk clock;
+        sc_fifo_in<int>   rx;
+        int               cnt = 0;
+    public:
+        SC_HAS_PROCESS(BB);
+        BB(sc_core::sc_module_name name)
+        {
+            SC_METHOD(mth_entry);
+            sensitive << clock.pos();
+        }
+
+        void mth_entry()
+        {
+            cnt++;
+            int i = 0;
+            while (rx->num_available())
+            {
+                //rx->nb_read(i);
+                i = rx->read();
+                std::cout << "cnt: " << cnt << ", BB: " << i << std::endl;
+            }
+        }
+};
+
 #endif
