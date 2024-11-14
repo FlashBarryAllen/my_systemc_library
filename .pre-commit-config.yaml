@@ -1,0 +1,14 @@
+repos:
+- repo: local
+  rev: v2.8  # 使用的 cppcheck 版本
+  hooks:
+    - id: cppcheck
+      name: cppcheck
+      files: \.(cpp|h|cc|hh|cxx|hxx)$  # 仅检查 C++ 文件
+      args: ['--enable=all', '--inconclusive']  # 启用所有检查项，并显示潜在的警告
+- repo: local
+  rev: v12  # 使用的 clang-format 版本，可以根据需要调整版本号
+  hooks:
+    - id: clang-format
+      name: clang-format
+      files: \.(cpp|h|cc|hh|cxx|hxx)$  # 仅格式化 C++ 相关文件

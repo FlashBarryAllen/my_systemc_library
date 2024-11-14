@@ -377,3 +377,149 @@ TEST(PFC, Gemini) {
         myswitch.sendPacket(packet, priority);
     }
 }
+
+#include <iostream>
+#include <queue>
+#include <cstdlib>
+#include <ctime>
+
+class Packet {
+public:
+    int size;
+    int priority;
+    Packet(int s, int p) : size(s), priority(p) {}
+};
+
+class WREDQueue {
+private:
+    std::queue<Packet> queue;
+    int maxSize;
+    double minThreshold;
+    double maxThreshold;
+    double maxP;
+
+public:
+    WREDQueue(int maxQueueSize, double minTh, double maxTh, double maxProb) 
+        : maxSize(maxQueueSize), minThreshold(minTh), maxThreshold(maxTh), maxP(maxProb) {
+        std::srand(std::time(0));  // Initialize random number generator
+    }
+
+    bool enqueue(Packet packet) {
+        if (queue.size() >= maxSize) {
+            std::cout << "Queue full. Packet dropped.\n";
+            return false;
+        }
+
+        double avgQueueSize = (double)queue.size();  // Simplified average queue size
+        double dropProbability = calculateDropProbability(avgQueueSize);
+
+        if (avgQueueSize >= minThreshold && avgQueueSize <= maxThreshold) {
+            if ((std::rand() / (double)RAND_MAX) < dropProbability) {
+                std::cout << "Packet dropped by WRED. Priority: " << packet.priority << "\n";
+                return false;
+            }
+        }
+
+        queue.push(packet);
+        std::cout << "Packet enqueued. Priority: " << packet.priority << "\n";
+        return true;
+    }
+
+    Packet dequeue() {
+        if (queue.empty()) {
+            throw std::runtime_error("Queue is empty.");
+        }
+        Packet packet = queue.front();
+        queue.pop();
+        return packet;
+    }
+
+private:
+    double calculateDropProbability(double avgQueueSize) {
+        if (avgQueueSize < minThreshold) {
+            return 0.0;
+        }
+        if (avgQueueSize > maxThreshold) {
+            return 1.0;
+        }
+        return maxP * (avgQueueSize - minThreshold) / (maxThreshold - minThreshold);
+    }
+};
+
+TEST(WRED, basic) {
+    WREDQueue wredQueue(10, 3.0, 7.0, 0.5);
+
+    for (int i = 0; i < 15; ++i) {
+        Packet p(i + 1, std::rand() % 3);
+        wredQueue.enqueue(p);
+    }
+
+    try {
+        while (true) {
+            Packet p = wredQueue.dequeue();
+            std::cout << "Dequeued packet with priority: " << p.priority << "\n";
+        }
+    } catch (const std::exception &e) {
+        std::cout << e.what() << "\n";
+    }
+}
+
+#include <iostream>
+#include <vector>
+#include <iomanip>
+
+class CRC32 {
+public:
+    CRC32() {
+        // 初始化CRC表
+        generateCRCTable();
+    }
+
+    uint32_t compute(const std::vector<uint8_t>& data) {
+        uint32_t crc = 0xFFFFFFFF;
+        for (size_t i = 0; i < data.size(); ++i) {
+            uint8_t byte = data[i];
+            uint32_t lookupIndex = (crc ^ byte) & 0xFF;
+            crc = (crc >> 8) ^ crcTable[lookupIndex];
+        }
+        return ~crc;  // 取反
+    }
+
+private:
+    std::vector<uint32_t> crcTable;
+
+    void generateCRCTable() {
+        uint32_t polynomial = 0x04C11DB7;
+        crcTable.resize(256);
+        for (uint32_t i = 0; i < 256; ++i) {
+            uint32_t crc = i;
+            for (uint32_t j = 0; j < 8; ++j) {
+                if (crc & 1) {
+                    crc = (crc >> 1) ^ polynomial;
+                } else {
+                    crc = crc >> 1;
+                }
+            }
+            crcTable[i] = crc;
+        }
+    }
+};
+
+TEST(CRC32, basic) {
+    CRC32 crc32;
+    std::vector<uint8_t> data = {'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd'};
+
+    uint32_t crcValue = crc32.compute(data);
+
+    std::cout << "CRC-32: 0x" << std::hex << std::uppercase << crcValue << std::endl;
+}
+
+void answer(unique_ptr p1)
+{
+    *p1 = 20;
+}
+
+TEST(unique_ptr, basic) {
+    unique_ptr p1 = make_unique<int>(10);
+
+}
