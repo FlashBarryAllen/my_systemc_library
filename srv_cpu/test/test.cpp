@@ -3,23 +3,16 @@
 #include <gtest/gtest.h>
 #include <bitset>
 
-int Add(int a, int b)
-{
-    return a + b;
-}
+int Add(int a, int b) { return a + b; }
 
-int bittest()
-{
-}
+int bittest() {}
 
-TEST(AddTest, Basic)
-{
+TEST(AddTest, Basic) {
     std::cout << "test gtest" << std::endl;
     EXPECT_EQ(Add(1, 2), 3);
 }
 
-TEST(bittest, Basic)
-{
+TEST(bittest, Basic) {
     std::cout << "hi gtest" << std::endl;
     std::bitset<10> mybitset;
     mybitset.set(1);
@@ -29,8 +22,7 @@ TEST(bittest, Basic)
     std::cout << mybitset << std::endl;
 }
 
-void TEST_dpa()
-{
+void TEST_dpa() {
     // Test case 1: Basic functionality
     std::cout << "Test case 1: Basic functionality" << std::endl;
     dpa_scheduler arbiter1(4, 4);
@@ -56,7 +48,7 @@ void TEST_dpa()
         }
 
         auto result = arbiter1.sch_result;
-        
+
         bool grant_0_2 = arbiter1.has_granted(0, 2);
         bool grant_0_3 = arbiter1.has_granted(0, 3);
         bool grant_1_0 = arbiter1.has_granted(1, 0);
@@ -67,13 +59,13 @@ void TEST_dpa()
         bool grant_3_1 = arbiter1.has_granted(3, 1);
         bool grant_3_3 = arbiter1.has_granted(3, 3);
     }
-    
+
     if (arbiter1.has_granted(1, 2)) {
         std::cout << "Input 1 is granted access to output 2." << std::endl;
     } else {
         std::cout << "Input 1 is not granted access." << std::endl;
     }
-    
+
     if (arbiter1.has_granted(2, 0)) {
         std::cout << "Input 2 is granted access to output 0." << std::endl;
     } else {
@@ -83,12 +75,12 @@ void TEST_dpa()
     // Test case 2: Invalid port numbers
     std::cout << "\nTest case 2: Invalid port numbers" << std::endl;
     try {
-        arbiter1.request(-1, 2); // Invalid input port
+        arbiter1.request(-1, 2);  // Invalid input port
     } catch (const std::exception& e) {
         std::cout << "Exception caught: " << e.what() << std::endl;
     }
     try {
-        arbiter1.has_granted(4, 0); // Invalid output port
+        arbiter1.has_granted(4, 0);  // Invalid output port
     } catch (const std::exception& e) {
         std::cout << "Exception caught: " << e.what() << std::endl;
     }
@@ -99,14 +91,16 @@ void TEST_dpa()
     arbiter2.arbitration();
     for (int i = 0; i < 2; ++i) {
         for (int j = 0; j < 2; ++j) {
-        if (arbiter2.has_granted(i, j)) {
-            std::cout << "Unexpected grant: Input " << i << " to output " << j << std::endl;
-        }
+            if (arbiter2.has_granted(i, j)) {
+                std::cout << "Unexpected grant: Input " << i << " to output "
+                          << j << std::endl;
+            }
         }
     }
 
     // Test case 4: Multiple requests for the same output port
-    std::cout << "\nTest case 4: Multiple requests for the same output port" << std::endl;
+    std::cout << "\nTest case 4: Multiple requests for the same output port"
+              << std::endl;
     dpa_scheduler arbiter3(3, 3);
     arbiter3.request(0, 2);
     arbiter3.request(1, 2);
@@ -129,12 +123,11 @@ void TEST_dpa()
     }
 }
 
-void TEST_islip()
-{
+void TEST_islip() {
     islip* myislip = new islip(4, 4);
     myislip->init_priority_ptr();
 
-    while(1) {
+    while (1) {
         myislip->init();
 
         for (auto i = 0; i < 4; i++) {
@@ -161,8 +154,7 @@ void TEST_islip()
     return;
 }
 
-void TEST_encap_pkt()
-{
+void TEST_encap_pkt() {
     const string data = "12345678";
     uint8_t* dstMac = new uint8_t[6];
     dstMac[0] = 12;
@@ -173,13 +165,13 @@ void TEST_encap_pkt()
     uint16_t sourcePort = 5555;
     uint16_t destinationPort = 80;
 
-    EncapsulatePacket(data, dstMac, srcMac, sourceIP, destinationIP, sourcePort, destinationPort);
+    EncapsulatePacket(data, dstMac, srcMac, sourceIP, destinationIP, sourcePort,
+                      destinationPort);
 
     return;
 }
 
-void TEST_sch()
-{
+void TEST_sch() {
     basic_sch sch = basic_sch(3);
 
     sch.set_val(0, 100);
@@ -204,15 +196,17 @@ void TEST_sch()
     }
 }
 
-#include <iostream>
 #include <chrono>
-#include <thread>
+#include <iostream>
 #include <mutex>
+#include <thread>
 
 class TokenBucket {
-public:
+   public:
     TokenBucket(double rate, double capacity)
-        : rate(rate), capacity(capacity), tokens(capacity), 
+        : rate(rate),
+          capacity(capacity),
+          tokens(capacity),
           last_time(std::chrono::steady_clock::now()) {}
 
     bool consume(double tokens) {
@@ -226,7 +220,7 @@ public:
         }
     }
 
-private:
+   private:
     void add_tokens() {
         auto now = std::chrono::steady_clock::now();
         std::chrono::duration<double> elapsed = now - last_time;
@@ -242,9 +236,8 @@ private:
     std::mutex mutex;
 };
 
-TEST(tokenbucket, basic)
-{
-    TokenBucket bucket(5, 10); // 每秒生成5个令牌，桶的容量为10个令牌
+TEST(tokenbucket, basic) {
+    TokenBucket bucket(5, 10);  // 每秒生成5个令牌，桶的容量为10个令牌
 
     for (int i = 0; i < 20; i++) {
         if (bucket.consume(1)) {
@@ -252,7 +245,8 @@ TEST(tokenbucket, basic)
         } else {
             std::cout << "令牌不足，等待..." << std::endl;
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(100)); // 每0.1秒尝试发送一个数据包
+        std::this_thread::sleep_for(
+            std::chrono::milliseconds(100));  // 每0.1秒尝试发送一个数据包
     }
 }
 
@@ -260,7 +254,7 @@ TEST(tokenbucket, basic)
 #include <queue>
 
 class NetworkNode {
-public:
+   public:
     NetworkNode(int capacity) : capacity(capacity), buffer_usage(0) {}
 
     void sendData(int data) {
@@ -282,7 +276,7 @@ public:
         }
     }
 
-private:
+   private:
     int capacity;
     int buffer_usage;
     std::queue<int> buffer;
@@ -297,19 +291,19 @@ TEST(PFC, basic) {
     NetworkNode node(100);
 
     node.sendData(50);
-    node.sendData(60); // This will trigger PFC frame
+    node.sendData(60);  // This will trigger PFC frame
     node.receiveData();
-    node.sendData(60); // Now this will be accepted
+    node.sendData(60);  // Now this will be accepted
 }
 
 #include <iostream>
-#include <vector>
 #include <queue>
+#include <vector>
 
 using namespace std;
 
 class Queue {
-public:
+   public:
     Queue(int capacity, int priority) {
         this->capacity = capacity;
         this->priority = priority;
@@ -329,18 +323,16 @@ public:
         }
     }
 
-    int getRemainingCapacity() const {
-        return capacity - buffer.size();
-    }
+    int getRemainingCapacity() const { return capacity - buffer.size(); }
 
-public:
+   public:
     int capacity;
     int priority;
     queue<int> buffer;
 };
 
 class Switch {
-public:
+   public:
     Switch(int numQueues) {
         for (int i = 0; i < numQueues; i++) {
             queues.push_back(Queue(10, i));
@@ -358,7 +350,7 @@ public:
         }
     }
 
-public:
+   public:
     void sendPFCFrame(int priority) {
         cout << "Sending PFC frame to sender of priority " << priority << endl;
     }
@@ -378,29 +370,32 @@ TEST(PFC, Gemini) {
     }
 }
 
-#include <iostream>
-#include <queue>
 #include <cstdlib>
 #include <ctime>
+#include <iostream>
+#include <queue>
 
 class Packet {
-public:
+   public:
     int size;
     int priority;
     Packet(int s, int p) : size(s), priority(p) {}
 };
 
 class WREDQueue {
-private:
+   private:
     std::queue<Packet> queue;
     int maxSize;
     double minThreshold;
     double maxThreshold;
     double maxP;
 
-public:
-    WREDQueue(int maxQueueSize, double minTh, double maxTh, double maxProb) 
-        : maxSize(maxQueueSize), minThreshold(minTh), maxThreshold(maxTh), maxP(maxProb) {
+   public:
+    WREDQueue(int maxQueueSize, double minTh, double maxTh, double maxProb)
+        : maxSize(maxQueueSize),
+          minThreshold(minTh),
+          maxThreshold(maxTh),
+          maxP(maxProb) {
         std::srand(std::time(0));  // Initialize random number generator
     }
 
@@ -410,12 +405,14 @@ public:
             return false;
         }
 
-        double avgQueueSize = (double)queue.size();  // Simplified average queue size
+        double avgQueueSize =
+            (double)queue.size();  // Simplified average queue size
         double dropProbability = calculateDropProbability(avgQueueSize);
 
         if (avgQueueSize >= minThreshold && avgQueueSize <= maxThreshold) {
             if ((std::rand() / (double)RAND_MAX) < dropProbability) {
-                std::cout << "Packet dropped by WRED. Priority: " << packet.priority << "\n";
+                std::cout << "Packet dropped by WRED. Priority: "
+                          << packet.priority << "\n";
                 return false;
             }
         }
@@ -434,7 +431,7 @@ public:
         return packet;
     }
 
-private:
+   private:
     double calculateDropProbability(double avgQueueSize) {
         if (avgQueueSize < minThreshold) {
             return 0.0;
@@ -442,7 +439,8 @@ private:
         if (avgQueueSize > maxThreshold) {
             return 1.0;
         }
-        return maxP * (avgQueueSize - minThreshold) / (maxThreshold - minThreshold);
+        return maxP * (avgQueueSize - minThreshold) /
+               (maxThreshold - minThreshold);
     }
 };
 
@@ -457,19 +455,20 @@ TEST(WRED, basic) {
     try {
         while (true) {
             Packet p = wredQueue.dequeue();
-            std::cout << "Dequeued packet with priority: " << p.priority << "\n";
+            std::cout << "Dequeued packet with priority: " << p.priority
+                      << "\n";
         }
-    } catch (const std::exception &e) {
+    } catch (const std::exception& e) {
         std::cout << e.what() << "\n";
     }
 }
 
+#include <iomanip>
 #include <iostream>
 #include <vector>
-#include <iomanip>
 
 class CRC32 {
-public:
+   public:
     CRC32() {
         // 初始化CRC表
         generateCRCTable();
@@ -485,7 +484,7 @@ public:
         return ~crc;  // 取反
     }
 
-private:
+   private:
     std::vector<uint32_t> crcTable;
 
     void generateCRCTable() {
@@ -507,19 +506,15 @@ private:
 
 TEST(CRC32, basic) {
     CRC32 crc32;
-    std::vector<uint8_t> data = {'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd'};
+    std::vector<uint8_t> data = {'H', 'e', 'l', 'l', 'o', ' ',
+                                 'W', 'o', 'r', 'l', 'd'};
 
     uint32_t crcValue = crc32.compute(data);
 
-    std::cout << "CRC-32: 0x" << std::hex << std::uppercase << crcValue << std::endl;
+    std::cout << "CRC-32: 0x" << std::hex << std::uppercase << crcValue
+              << std::endl;
 }
 
-void answer(unique_ptr p1)
-{
-    *p1 = 20;
-}
+void answer(unique_ptr p1) { *p1 = 20; }
 
-TEST(unique_ptr, basic) {
-    unique_ptr p1 = make_unique<int>(10);
-
-}
+TEST(unique_ptr, basic) { unique_ptr p1 = make_unique<int>(10); }
