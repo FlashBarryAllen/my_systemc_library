@@ -5,8 +5,6 @@
 
 int Add(int a, int b) { return a + b; }
 
-int bittest() {}
-
 TEST(AddTest, Basic) {
     std::cout << "test gtest" << std::endl;
     EXPECT_EQ(Add(1, 2), 3);
