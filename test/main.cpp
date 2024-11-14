@@ -11,7 +11,7 @@ using namespace std;
 
 int parseNum(string& token)
 {
-  int num;
+  int num = 0;
   if (token.find("0x") != string::npos) {
       sscanf(token.c_str(), "%x", &num);
   } else {
