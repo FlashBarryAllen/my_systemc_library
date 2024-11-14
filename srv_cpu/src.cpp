@@ -1,7 +1,6 @@
 #include "src.h"
 
-src::src(sc_core::sc_module_name name)
-    : m_val(0), m_credit(0) {
+src::src(sc_core::sc_module_name name) : m_val(0), m_credit(0) {
     m_src_rx.register_nb_transport_fw(this, &src::nb_transport_fw);
     SC_METHOD(mth_entry);
     sensitive << m_clk.pos();
@@ -54,7 +53,6 @@ void src::cal_speed() {
 
     // std::cout << cur_us << std::endl;
 }
-
 
 tlm::tlm_sync_enum src::nb_transport_fw(tlm::tlm_generic_payload& trans,
                                         tlm::tlm_phase& phase,
