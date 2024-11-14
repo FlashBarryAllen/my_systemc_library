@@ -515,6 +515,6 @@ TEST(CRC32, basic) {
               << std::endl;
 }
 
-void answer(unique_ptr p1) { *p1 = 20; }
+//void answer(unique_ptr p1) { *p1 = 20; }
 
 TEST(unique_ptr, basic) { unique_ptr p1 = make_unique<int>(10); }
