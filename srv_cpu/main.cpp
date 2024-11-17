@@ -31,6 +31,12 @@ int sc_main(int argc, char* argv[]) {
     a.tx(tx_rx);
     b.rx(tx_rx);
 
+    CC c("cc");
+    DD d("dd");
+    c.clk(*clk);
+    d.clk(*clk);
+    c.tx.bind(d.rx);
+
     sc_start(10, sc_core::SC_NS);
 
     std::cout << "done" << std::endl;
