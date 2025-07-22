@@ -1,6 +1,6 @@
 #include "tgt.h"
 
-tgt::tgt(sc_core::sc_module_name name) : m_crdt_sch_cycle(1), m_cycle_cnt(0) {
+tgt::tgt(sc_core::sc_module_name name) : m_crdt_sch_cycle(10), m_cycle_cnt(0) {
     m_tgt_rx.register_nb_transport_fw(this, &tgt::nb_transport_fw);
     SC_METHOD(mth_entry);
     sensitive << m_clk.pos();
@@ -13,7 +13,7 @@ tgt::tgt(sc_core::sc_module_name name) : m_crdt_sch_cycle(1), m_cycle_cnt(0) {
 }
 
 void tgt::mth_dat_proc() {
-    m_logger->info("cycle: {:d}, [TGT] credit fifo depth: {:d}.", m_cycle_cnt, m_peq_ctl_stat.size());
+    m_logger->info("cycle: {:d}, [TGT] req fifo depth: {:d}.", m_cycle_cnt, m_peq_ctl_stat.size());
     if (m_rcv_dat.size() != 0) {
         auto p_dat = m_rcv_dat.front();
         m_peq.delay(*p_dat, 6);
@@ -21,9 +21,8 @@ void tgt::mth_dat_proc() {
         p_ctl->msg.type = CTRL_MSG;
         p_ctl->msg.credit = 1;
         m_peq_ctl.delay(*p_ctl, 6);
-        m_peq_ctl_stat.push_back(1);
-        m_logger->info("cycle: {:d}, [TGT] credit delay 6 cycles.", m_cycle_cnt);
         m_rcv_dat.pop_front();
+        m_logger->info("cycle: {:d}, [TGT] req proc delay 6 cycles.", m_cycle_cnt);
     }
 }
 
@@ -38,11 +37,14 @@ void tgt::mth_get_peq() {
     while ((p_ctl = m_peq_ctl.get_next_transaction()) != nullptr) {
         // std::cout << "sc_time_stamp: " << sc_time_stamp() << std::endl;
         m_snd_ctl.push_back(p_ctl);
-        m_peq_ctl_stat.pop_front();
     }
 }
 
 void tgt::mth_snd_msg() {
+    if ((m_cycle_cnt % m_crdt_sch_cycle) != 0) {
+        return;
+    }
+
     if (m_snd_ctl.size() != 0) {
         auto p_ctl = m_snd_ctl.front();
 
@@ -58,6 +60,7 @@ void tgt::mth_snd_msg() {
         m_tgt_tx->nb_transport_fw(trans, phase, time);
 
         m_snd_ctl.pop_front();
+        m_peq_ctl_stat.pop_front();
         m_logger->info("cycle: {:d}, [TGT] snd credit.", m_cycle_cnt);
     }
 
@@ -100,6 +103,7 @@ tlm::tlm_sync_enum tgt::nb_transport_fw(tlm::tlm_generic_payload& trans,
     auto p_api = (MY_API_T*)trans.get_data_ptr();
     auto p_dat = std::static_pointer_cast<MY_DAT_T>(p_api->dat);
     m_rcv_dat.push_back(p_dat);
+    m_peq_ctl_stat.push_back(1);
     delete p_api;
 
     m_logger->info("cycle: {:d}, [TGT][RCV]", m_cycle_cnt);
