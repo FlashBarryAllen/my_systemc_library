@@ -28,13 +28,15 @@ void src::mth_entry() {
 
     p_api->dat = p_dat;
 
-    m_logger->info("SRC print a: 0x{:x}", p_dat->a);
+    m_logger->info("cycle: {:d}, SRC print a: 0x{:x}", m_cycle_cnt, p_dat->a);
 
     tlm::tlm_generic_payload trans;
     trans.set_command(tlm::TLM_WRITE_COMMAND);
     trans.set_data_ptr((unsigned char*)p_api);
     tlm::tlm_phase phase = tlm::BEGIN_REQ;
     sc_core::sc_time time = sc_core::SC_ZERO_TIME;
+
+    m_logger->info("cycle: {:d}, [SRC][RESERVED] credit: {:d}", m_cycle_cnt, m_credit);
 
     if (m_credit > 0) {
         m_src_tx->nb_transport_fw(trans, phase, time);
@@ -57,17 +59,15 @@ void src::cal_speed() {
 tlm::tlm_sync_enum src::nb_transport_fw(tlm::tlm_generic_payload& trans,
                                         tlm::tlm_phase& phase,
                                         sc_core::sc_time& time) {
-    m_logger->info("[SRC][RCV] cycle: {:d}", m_cycle_cnt);
-
     auto p_api = (MY_API_T*)trans.get_data_ptr();
     auto p_dat = static_pointer_cast<MY_DAT_T>(p_api->dat);
     auto type = p_api->msg.type;
 
     if (type == CTRL_MSG) {
-        m_logger->info("[SRC][RCV] credit: {:d}", p_api->msg.credit);
+        m_logger->info("cycle: {:d}, [SRC][RCV] credit: {:d}", m_cycle_cnt, p_api->msg.credit);
         m_credit += p_api->msg.credit;
     } else if (type == DATA_MSG) {
-        m_logger->info("[SRC][RCV] a: {:d}", p_dat->a);
+        m_logger->info("cycle: {:d}, [SRC][RCV] a: {:d}", m_cycle_cnt, p_dat->a);
     }
 
     delete p_api;

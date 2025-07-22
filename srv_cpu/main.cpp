@@ -37,7 +37,7 @@ int sc_main(int argc, char* argv[]) {
     d.clk(*clk);
     c.tx.bind(d.rx);
 
-    sc_start(10, sc_core::SC_NS);
+    sc_start(20, sc_core::SC_NS);
 
     std::cout << "done" << std::endl;
 

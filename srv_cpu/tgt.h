@@ -25,6 +25,7 @@ class tgt : public sc_core::sc_module {
     int m_cycle_cnt;
     int m_crdt_sch_cycle;
     little_end::peq<MY_DAT_T> m_peq;
+    little_end::peq<MY_API_T> m_peq_ctl;
     sc_core::sc_in_clk m_clk;
     tlm_utils::simple_initiator_socket<tgt> m_tgt_tx;
     tlm_utils::simple_target_socket<tgt> m_tgt_rx;
@@ -32,6 +33,7 @@ class tgt : public sc_core::sc_module {
     deque<shared_ptr<MY_API_T>> m_snd_ctl;
     deque<shared_ptr<MY_DAT_T>> m_peq_que;
     deque<shared_ptr<MY_DAT_T>> m_snd_msg_que;
+    deque<int> m_peq_ctl_stat;
     std::shared_ptr<spdlog::logger> m_logger;
 };
 
