@@ -108,7 +108,7 @@ class top : public sc_core::sc_module {
         t->m_clk(*m_clk);
         s->m_src_tx.bind(t->m_tgt_rx);
         t->m_tgt_tx.bind(s->m_src_rx);
-        s->m_credit = 1000;
+        s->m_credit = 3;
     }
 
    public:

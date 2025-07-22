@@ -1,6 +1,6 @@
 #include "tgt.h"
 
-tgt::tgt(sc_core::sc_module_name name) : m_crdt_sch_cycle(10), m_cycle_cnt(0) {
+tgt::tgt(sc_core::sc_module_name name) : m_crdt_sch_cycle(2), m_cycle_cnt(0) {
     m_tgt_rx.register_nb_transport_fw(this, &tgt::nb_transport_fw);
     SC_METHOD(mth_entry);
     sensitive << m_clk.pos();
